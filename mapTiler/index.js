@@ -1,7 +1,7 @@
 const MapSlicer = require("mapslice");
 
 const mapSlicer = new MapSlicer({
-  file: `./ba.jpg`,
+  file: `./map.jpg`,
   output: `./output/{z}/tile_{x}_{y}.jpg`,
   imageMagick: true,
   // parallelLimit: 1,
