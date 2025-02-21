@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 
 # usage:
-# ./tmux.sh server-1 server-2 ...
+# ./tmuxer.sh server-1 server-2 ...
 #
 # Connects via ssh to all servers given in input using tmux.
-# Requires 'tmux', forked from https://gist.github.com/dmytro/3984680
+# Requires 'tmux'. Forked from https://gist.github.com/dmytro/3984680
+
+# Installation: sudo ln -s -f "${PWD}/tmuxer.sh" /usr/local/bin/tmuxer
 
 hosts=("$@")
 
