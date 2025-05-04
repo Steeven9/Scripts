@@ -7,11 +7,11 @@
 # then commits and pushes the changes
 
 # projects home
-git_home="$HOME/projects"
-# folders to exclude from the pull (full path, e.g. "$git_home/scripts")
-exclusions=("$git_home/Scripts")
+git_home="${HOME}/projects"
+# folders to exclude from the pull (full path, e.g. "${git_home}/scripts")
+exclusions=("${git_home}/Scripts")
 # message used in the commit
-commit_message="Update deps"
+commit_message="[chore] Update deps"
 
 for d in $git_home/*/; do
   dir=${d%*/}
@@ -38,7 +38,7 @@ for d in $git_home/*/; do
   yarn upgrade
   yarn build
 
-  git commit -am $commit_message
+  git commit -am "${commit_message}"
   git push
 
   git stash pop
