@@ -2,7 +2,7 @@
 
 SERVERS=("boblin.home" "roblin.home" "voblin.home")
 VMS=("devbox.home" "firebox.home")
-TIMEOUT=30
+TIMEOUT=10
 
 read -s -p "Enter server sudo password: " SUDO_PASSWORD
 echo ""
