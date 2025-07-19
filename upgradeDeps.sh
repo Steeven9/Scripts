@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # usage:
-# ./updateDeps.sh
+# ./upgradeDeps.sh
 #
 # Runs 'yarn upgrade' in all the repos,
 # then commits and pushes the changes
@@ -11,7 +11,7 @@ git_home="${HOME}/projects"
 # folders to exclude from the pull (full path, e.g. "${git_home}/scripts")
 exclusions=("${git_home}/Scripts")
 # message used in the commit
-commit_message="[chore] Update deps"
+commit_message="[chore] Upgrade deps"
 
 for d in $git_home/*/; do
   dir=${d%*/}

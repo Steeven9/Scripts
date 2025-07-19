@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Custom update script to update all my VMs and servers
+
 SERVERS=("boblin.home" "roblin.home" "voblin.home")
 VMS=("devbox.home" "firebox.home")
 TIMEOUT=10

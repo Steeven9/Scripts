@@ -10,4 +10,3 @@ sfc /scannow
 dism /online /cleanup-image /restorehealth
 
 echo Done!
-pause
