@@ -2,53 +2,40 @@
 
 # Custom update script to update all my VMs and servers
 
-SERVERS=("boblin.home" "roblin.home" "voblin.home")
+SERVERS=("docker.home" "pi.home")
 VMS=("devbox.home" "firebox.home")
-TIMEOUT=10
 
 read -s -p "Enter server sudo password: " SUDO_PASSWORD
 echo ""
 
-for SERVER in "${SERVERS[@]}"; do
-  echo "Connecting to ${SERVER}..."
-  SERVER_HOSTNAME=$(echo ${SERVER} | cut -d '.' -f 1)
+for server in "${SERVERS[@]}"; do
+  echo "=== Connecting to ${server}... ===" && echo ""
 
-  ssh "${SERVER}" <<EOF
-    if [ \$(nala list --upgradable | grep docker | wc -l) -ne 0 ]; then
-      echo "Draining node ${SERVER}..."
-      docker node update --availability drain ${SERVER_HOSTNAME}
-      
-      echo "Waiting for containers to stop..."
-      while [ \$(docker ps | wc -l) -ne 1 ]; do print '.'; sleep 2; done
-    fi
-
-    echo "Running topgrade..."
+  ssh "${server}" <<EOF
+    echo "Running update..."
     echo "${SUDO_PASSWORD}" | sudo -S ls > /dev/null
-    /home/linuxbrew/.linuxbrew/bin/topgrade
-
-    echo "Reactivating node ${SERVER}..."
-    docker node update --availability active ${SERVER_HOSTNAME}
+    sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y
 EOF
 
-  echo "Completed session on ${SERVER}. Sleeping for ${TIMEOUT}s..."
-  sleep "${TIMEOUT}"
+  echo "=== Completed session on ${server} ===" && echo ""
 done
 
-for VM in "${VMS[@]}"; do
-  echo "Connecting to ${VM}..."
+for vm in "${VMS[@]}"; do
+  echo "=== Connecting to ${vm}... ===" && echo ""
 
-  if [ "${VM}" == "firebox.home" ]; then
+  if [ "${vm}" == "firebox.home" ]; then
     read -s -p "Enter VM sudo password: " SUDO_PASSWORD
     echo ""
   fi
 
-  ssh "${VM}" <<EOF
+  ssh "${vm}" <<EOF
     echo "Running topgrade..."
     echo "${SUDO_PASSWORD}" | sudo -S ls > /dev/null
     /home/linuxbrew/.linuxbrew/bin/topgrade
 EOF
 
-  echo "Completed session on ${VM}"
+  echo "=== Completed session on ${vm} ===" && echo ""
 done
 
+echo ""
 echo "All sessions completed!"
