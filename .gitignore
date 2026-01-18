@@ -1,9 +1,10 @@
 node_modules/
-output.json
+.tmp/
+.vscode/
+.idea/
+.DS_Store
+*.json
 *.log
 *.jpg
 *.png
-.tmp/
-.DS_Store
-.vscode/
-.idea/
+*.csv
