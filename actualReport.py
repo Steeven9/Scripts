@@ -31,24 +31,43 @@ def monthly_category_averages(csv_path, year):
 
 
 def main():
-    if len(sys.argv) != 3:
-        print(f"Usage: python {sys.argv[0]} <input_file.csv> <year>")
+    if len(sys.argv) != 4:
+        print(
+            f"Usage: python {sys.argv[0]} <input_file.csv> <year> <short|long>"
+        )
         sys.exit(1)
 
     csv_path = sys.argv[1]
     year = int(sys.argv[2])
+    format_style = sys.argv[3]
 
     averages = monthly_category_averages(csv_path, year)
-
     total_sum = 0
+
+    if format_style == "short":
+        # first row: print column labels
+        print("Category,Total,Monthly avg")
+
     for category in sorted(averages):
         category_sum = 0
+
         for month in sorted(averages[category]):
             avg = averages[category][month]
             category_sum += avg
 
         total_sum += category_sum
-        print(f"{category},{category_sum:.2f},{(category_sum / 12):.2f}")
+        if format_style == "short":
+            print(f"{category},{category_sum:.2f},{(category_sum / 12):.2f}")
+
+    if format_style == "long":
+        # first row: print all category labels
+        for category in sorted(averages):
+            print(f"{category}", end=",")
+        print()
+        for month in range(1, 13):
+            for category in sorted(averages):
+                print(averages[category][month], end=",")
+            print()
 
     print(f"\nTotal difference: {total_sum:.2f}")
     print(f"Monthly average:    {(total_sum / 12):.2f}")
