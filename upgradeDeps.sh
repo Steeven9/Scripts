@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
 # usage:
 # ./upgradeDeps.sh
@@ -7,43 +8,47 @@
 # then commits and pushes the changes
 
 # projects home
-git_home="${HOME}/projects"
-# folders to exclude from the pull (full path, e.g. "${git_home}/scripts")
-exclusions=("${git_home}/Scripts")
+GIT_HOME="$HOME/projects"
+# folders to exclude from the pull (full path, e.g. "$GIT_HOME/Scripts")
+EXCLUDE_DIRS=("")
 # message used in the commit
 commit_message="[chore] Upgrade deps"
 
-for d in $git_home/*/; do
-  dir=${d%*/}
-
-  if [[ " ${exclusions[*]} " =~ " ${dir} " ]]; then
-    echo "* Skipping $dir due to ignore list... *"
+for dir in "${GIT_HOME}"/*; do
+  if [[ " ${EXCLUDE_DIRS[*]} " =~ " ${dir} " ]]; then
+    echo "* Skipping ${dir} due to ignore list... *"
     echo "-----------"
     continue
   fi
 
-  if [[ ! -f "$dir/yarn.lock" ]]; then
-    echo "* Skipping $dir, not a Yarn repo... *"
+  if [[ ! -f "${dir}/yarn.lock" ]]; then
+    echo "* Skipping ${dir}, not a Yarn repo... *"
     echo "-----------"
     continue
   fi
 
-  echo "* Updating $dir... *"
-  cd "$d"
+  echo "* Updating ${dir}... *"
+  cd "${dir}"
 
-  git stash
+  if [[ -n $(git status --short | grep -v "^??") ]]; then
+    git stash
+    stashed=true
+  fi
 
   git pull
 
   yarn upgrade
   yarn build
+  yarn audit
 
   git commit -am "${commit_message}"
   git push
 
-  git stash pop
+  if [[ $stashed == true ]]; then
+    git stash pop
+  fi
 
-  cd ..
+  cd "${GIT_HOME}"
   echo "-----------"
 done
 
