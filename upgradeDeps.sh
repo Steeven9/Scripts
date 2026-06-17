@@ -30,6 +30,7 @@ for dir in "${GIT_HOME}"/*; do
   echo "* Updating ${dir}... *"
   cd "${dir}"
 
+  stashed=false
   if [[ -n $(git status --short | grep -v "^??") ]]; then
     git stash
     stashed=true
