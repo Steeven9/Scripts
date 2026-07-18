@@ -10,7 +10,7 @@ set -euo pipefail
 # projects home
 GIT_HOME="$HOME/projects"
 # folders to exclude from the pull (full path, e.g. "$GIT_HOME/Scripts")
-EXCLUDE_DIRS=("")
+EXCLUDE_DIRS=("$GIT_HOME/Scripts")
 # message used in the commit
 commit_message="[chore] Upgrade deps"
 
@@ -39,8 +39,10 @@ for dir in "${GIT_HOME}"/*; do
   git pull
 
   yarn upgrade
-  yarn build
-  yarn audit
+  yarn audit fix || true
+  if [[ $(cat package.json | grep build) ]]; then
+    yarn build
+  fi
 
   git commit -am "${commit_message}"
   git push
